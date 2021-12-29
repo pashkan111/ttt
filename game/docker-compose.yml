@@ -10,3 +10,15 @@ services:
       - ./volumes/postgresql/pg-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+
+  web:
+    build: .
+    dockerfile: Dockerfile
+    command: /bin/sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver"
+    restart: always
+    env_file:
+     - ./.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
